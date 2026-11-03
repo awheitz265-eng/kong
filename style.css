@@ -6,3 +6,6 @@
 @media(prefers-reduced-motion:reduce){*{transition:none!important}}
 
 body.is-playing .masthead{display:none}body.is-playing header{height:58px}body.is-playing main{padding-top:16px}body.is-playing .cabinet{max-width:min(100%,calc((100svh - 185px)*1.6667));margin-inline:auto}body.is-playing footer{display:none}body.is-playing .below{margin-top:24px}@media(max-width:540px){body.is-playing .cabinet{max-width:100%}body.is-playing main{padding-top:12px}}
+
+/* Illustrated edition: a warm metallic cabinet with subtle studio light. */
+.cabinet{border-color:#100f20;box-shadow:0 3px 0 #716075,inset 0 1px #ffffff25,0 12px 0 #15121b,0 24px 70px #0005}.hud{background:linear-gradient(115deg,#383246,#262337);box-shadow:inset 0 1px #ffffff19}.stage{background:#6c8cbd}.masthead{position:relative}.title-lockup{filter:drop-shadow(0 10px 20px #ffce5112)}.hud-cell strong{font-variant-numeric:tabular-nums}.menu-card{background:linear-gradient(135deg,#fff9e9,#f5e7c7)}.ticket{background:linear-gradient(110deg,#ffdf79,#edbc4f)}

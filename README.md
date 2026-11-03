@@ -26,3 +26,10 @@ Alle Figuren, Grafiken und Melodien sind eigens für dieses Spiel gestaltet. Kei
 
 Neu gezeichnete Charaktere: artikulierte Lauf-, Sprung- und Kletterbewegungen, Körperfederung, wehender Schal; Gorilla mit flacher Nase, breiten Schultern und synchronisierter Fasswurf-Animation. Animierte Prinzessin mit Krone, Kleid und Befreiungssequenz. Zehn individuelle Farbwelten und Leiterlayouts mit begrenzter Schwierigkeitsskalierung.
 
+## Version 3 – Illustrated Edition
+
+Zehn eigenständige Kulissen mit Hafenbecken und Schiffen, Gewächshäusern, Fabrikrohren, Regenbrücke, Schneebergen und Schlossarchitektur. Vorberechnete Hintergrundebenen, Parallaxe, Materialplattformen, Neonlicht und Wettereffekte. Figuren mit Farbverläufen, Sprungstreckung, Landefederung und Laufstaub; hochauflösendes Canvas und variierende Musikphrasen. Alles in JavaScript/Canvas ohne Engine und ohne externe Grafikbibliothek.
+
+Die zusätzliche Datei art.js enthält die Grafikschicht. Automatische Prüfung: node check-game.cjs. FORTSETZEN.md dokumentiert den Arbeitsstand für spätere Fortsetzungen.
+
+
