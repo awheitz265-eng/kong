@@ -1,6 +1,6 @@
 # KONG · Rooftop Rumble
 
-Ein eigenständiges Comic-Arcade-Spiel, inspiriert vom klassischen Plattform-und-Leiter-Spielprinzip. Drei Levels, handgezeichnete Canvas-Grafik, prozeduraler Web-Audio-Soundtrack, Fässer, Funken, Sterne, Hammer-Power-up, lokaler Highscore und Touch-Steuerung.
+Ein eigenständiges Comic-Arcade-Spiel, inspiriert vom klassischen Plattform-und-Leiter-Spielprinzip. Zehn Levels, handgezeichnete Canvas-Grafik, prozeduraler Web-Audio-Soundtrack, Fässer, Funken, Sterne, Hammer-Power-up, lokaler Highscore und Touch-Steuerung.
 
 ## Spielen
 
@@ -12,7 +12,7 @@ Ein eigenständiges Comic-Arcade-Spiel, inspiriert vom klassischen Plattform-und
 - M: Ton an/aus
 - Touch: Schaltflächen unter dem Spielfeld
 
-Erreiche die grüne Flagge auf jedem Dach. Sterne geben 250 Punkte, übersprungene Fässer 100, zerstörte Fässer 200. Der Hammer wirkt 8 Sekunden. Drei Leben gelten für den gesamten Durchlauf. Es gibt kein Zeitlimit; nur der Abschlussbonus sinkt mit der Zeit. Der Rekord bleibt im Browser gespeichert, soweit dieser lokale Speicherung erlaubt.
+Befreie Prinzessin Lumi von zehn magischen Schlössern: Erreiche ihren Käfig auf jedem der zehn Dächer. Im letzten Level öffnet sich der Käfig endgültig. Sterne geben 250 Punkte, übersprungene Fässer 100, zerstörte Fässer 200. Der Hammer wirkt 8 Sekunden. Du startest mit drei Leben. Nach jedem zweiten Level wird ein verlorenes Leben aufgefüllt (maximal drei). Es gibt kein Zeitlimit; nur der Abschlussbonus sinkt mit der Zeit. Der Rekord bleibt im Browser gespeichert, soweit dieser lokale Speicherung erlaubt.
 
 ## Dateien
 
@@ -21,4 +21,8 @@ Erreiche die grüne Flagge auf jedem Dach. Sterne geben 250 Punkte, übersprunge
 - `game.js`: feste Physik-Zeitschritte, Zeichnung, Spielzustände und Web Audio
 
 Alle Figuren, Grafiken und Melodien sind eigens für dieses Spiel gestaltet. Keine externen Spiele-Assets, kein Tracking, keine Konten, keine Zahlungen.
+
+## Version 2
+
+Neu gezeichnete Charaktere: artikulierte Lauf-, Sprung- und Kletterbewegungen, Körperfederung, wehender Schal; Gorilla mit flacher Nase, breiten Schultern und synchronisierter Fasswurf-Animation. Animierte Prinzessin mit Krone, Kleid und Befreiungssequenz. Zehn individuelle Farbwelten und Leiterlayouts mit begrenzter Schwierigkeitsskalierung.
 
