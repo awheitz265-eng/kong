@@ -33,3 +33,6 @@ Zehn eigenständige Kulissen mit Hafenbecken und Schiffen, Gewächshäusern, Fab
 Die zusätzliche Datei art.js enthält die Grafikschicht. Automatische Prüfung: node check-game.cjs. FORTSETZEN.md dokumentiert den Arbeitsstand für spätere Fortsetzungen.
 
 
+## Version 4 – Fässer auf Abwegen
+
+Fässer wählen beim Überqueren jeder Leiter einmal zufällig zwischen Weiterrollen und Hinunterfallen (24 % in Level 1 bis 34,8 % in Level 10). Sie fallen senkrecht, landen auf der nächsten Plattform und rollen in Gegenrichtung weiter. Das Tempo steigt pro Level um 14 Pixel pro Sekunde: 107–117 in Level 1 bis 233–243 in Level 10. Die Geschwindigkeitsbereiche überlappen sich nicht.

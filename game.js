@@ -40,7 +40,26 @@ function pause(){if(state!=='playing')return;state='paused';keys.clear();showCar
 function resume(){state='playing';keys.clear();$('overlay').classList.add('hidden');$('status').textContent='WEITER GEHT’S!';canvas.focus({preventScroll:true});sound.start();}
 function hurt(){if(player.inv>0)return;lives--;sound.fx('hit');shake=reduced?0:12;burst(player.x,player.y-22,'#fff0b5',25);if(lives<=0){state='over';record();showCard('DAS WAR KNAPP!','Noch eine<br><em>Runde?</em>','Jeder gute Aufstieg beginnt mit einem neuen Versuch. Dein Rekord wartet darauf, gebrochen zu werden.','NOCH MAL',score.toLocaleString('de-CH')+' Punkte · Rekord '+best.toLocaleString('de-CH'));$('status').textContent='GAME OVER · ABER NICHT FÜR IMMER.';}else{Object.assign(player,{x:115,y:surface(0,115),vx:0,vy:0,floor:0,onGround:true,climbing:null,inv:3,power:0});barrels=barrels.filter(b=>b.floor!==0);notify('WEITER! NOCH '+lives+' LEBEN');}updateHud();}
 function finish(){state='winning';winTimer=2.8;const bonus=Math.max(0,5000-Math.floor(elapsed)*20);points(bonus,1040,135,'BONUS +'+bonus);sound.fx('win');notify(level===themes.length-1?'PRINZESSIN LUMI IST FREI!':'SCHLOSS '+(level+1)+' VON '+themes.length+' GEÖFFNET!');if(level<themes.length-1&&(level+1)%2===0&&lives<3){lives++;popups.push({x:980,y:110,text:'+1 LEBEN',life:2,color:'#fff5c4'});}for(let i=0;i<55;i++)particles.push({x:rnd(150,1100),y:rnd(40,180),vx:rnd(-130,130),vy:rnd(-230,-50),life:rnd(1,2.6),max:2.6,color:['#ffdc60','#f47b6f','#a7e1cc'][i%3],size:rnd(5,11)});record();}
-function spawnBarrel(){throwTime=.45;barrels.push({x:215,y:surface(4,215)-16,floor:4,dir:1,fall:false,vy:0,rot:0,speed:110+level*9+rnd(-9,10),scored:false,metal:level>=4&&Math.random()<.22});}
+// Non-overlapping speed bands: even the slowest barrel is faster next level.
+function barrelSpeed(n){return 112+n*14+rnd(-5,5);}
+function ladderDropChance(n){return .24+n*.012;}
+function spawnBarrel(){throwTime=.45;barrels.push({x:215,y:surface(4,215)-16,floor:4,dir:1,fall:false,vy:0,rot:0,speed:barrelSpeed(level),scored:false,metal:level>=4&&Math.random()<.22});}
+function moveBarrel(b,dt){
+ b.rot+=b.dir*b.speed*dt/16;
+ if(b.fall){
+  b.vy+=1000*dt;b.y+=b.vy*dt;
+  const target=surface(b.floor,b.x)-16;
+  if(b.y>=target){b.y=target;b.fall=false;b.dir*=-1;b.vy=0;}
+  return;
+ }
+ const previousX=b.x;b.x+=b.dir*b.speed*dt;b.y=surface(b.floor,b.x)-16;
+ // Test only when crossing a ladder centre, never once per animation frame.
+ const crossed=ladders.filter(l=>l.high===b.floor&&(b.dir>0?previousX<l.x&&b.x>=l.x:previousX>l.x&&b.x<=l.x)).sort((a,c)=>b.dir*(a.x-c.x));
+ for(const l of crossed){if(Math.random()<ladderDropChance(level)){
+  b.x=l.x;b.y=l.top-16;b.floor=l.low;b.fall=true;b.vy=0;b.scored=false;return;
+ }}
+ if(b.x>1136||b.x<64){b.x=clamp(b.x,64,1136);b.floor--;if(b.floor<0){b.dead=true;return;}b.fall=true;b.vy=0;b.scored=false;}
+}
 function update(dt){clock+=dt;throwTime=Math.max(0,throwTime-dt);if(noticeTime>0){noticeTime-=dt;if(noticeTime<=0)$('notice').classList.remove('show');}shake=Math.max(0,shake-dt*30);
  for(const p of particles){p.x+=p.vx*dt;p.y+=p.vy*dt;p.vy+=460*dt;p.life-=dt;}particles=particles.filter(p=>p.life>0);for(const p of popups){p.y-=40*dt;p.life-=dt;}popups=popups.filter(p=>p.life>0);
  if(state==='winning'){winTimer-=dt;if(winTimer<=0){if(level<themes.length-1){state='between';showCard('SCHLOSS '+(level+1)+' VON '+themes.length+' GEÖFFNET','Weiter zur<br><em>Prinzessin.</em>','Ein Bann weniger! Der nächste Riegel wartet auf dem Dach „'+themes[level+1].name+'“. Befreie Lumi von allen zehn Schlössern.','NÄCHSTES LEVEL',score.toLocaleString('de-CH')+' Punkte · '+lives+' Leben · alle 2 Levels ein Leben zurück');}else{state='won';showCard('PRINZESSIN LUMI IST FREI','Ein royales<br><em>Happy End!</em>','Zehn Dächer bezwungen, alle Schlösser geöffnet und Prinzessin Lumi befreit. Die Stadt feiert euch!','NOCH EINE RUNDE',score.toLocaleString('de-CH')+' Punkte · Rekord '+best.toLocaleString('de-CH'));$('status').textContent='10 LEVELS GESCHAFFT · PRINZESSIN BEFREIT!';}}return;}
@@ -53,7 +72,7 @@ function update(dt){clock+=dt;throwTime=Math.max(0,throwTime-dt);if(noticeTime>0
  dustClock-=dt;if(p.onGround&&Math.abs(p.vx)>100&&dustClock<=0){dustClock=.11;particles.push({x:p.x-p.face*10,y:p.y-2,vx:-p.face*rnd(20,45),vy:rnd(-35,-10),life:.3,max:.3,color:"#f4e6ce88",size:rnd(3,6)});}
  for(const s of stars)if(!s.got&&Math.hypot(p.x-s.x,p.y-24-s.y)<34){s.got=true;points(250,s.x,s.y);burst(s.x,s.y,'#ffe173',10);sound.fx('star');}
  if(!hammer.got&&Math.hypot(p.x-hammer.x,p.y-24-hammer.y)<36){hammer.got=true;p.power=8;points(500,hammer.x,hammer.y,'HAMMER!');sound.fx('power');notify('HAMMERZEIT! · 8 SEKUNDEN');}
- for(const b of barrels){b.rot+=b.dir*b.speed*dt/16;if(b.fall){b.vy+=1000*dt;b.y+=b.vy*dt;const target=surface(b.floor,b.x)-16;if(b.y>=target){b.y=target;b.fall=false;b.dir*=-1;b.vy=0;}}else{b.x+=b.dir*b.speed*dt;b.y=surface(b.floor,b.x)-16;if(b.x>1136||b.x<64){b.x=clamp(b.x,64,1136);b.floor--;if(b.floor<0){b.dead=true;continue;}b.fall=true;b.vy=0;b.scored=false;}}
+ for(const b of barrels){moveBarrel(b,dt);if(b.dead)continue;
  const dx=Math.abs(p.x-b.x),dy=Math.abs(p.y-22-b.y);if(p.power>0&&dx<66&&dy<60){b.dead=true;burst(b.x,b.y,b.metal?'#b8e0de':'#eab765',18);points(200,b.x,b.y,'KRACH! +200');sound.fx('smash');shake=reduced?0:4;}else if(dx<27&&dy<31){hurt();}else if(!b.scored&&!p.onGround&&!p.climbing&&dx<29&&p.y<b.y-6&&p.y>b.y-100){b.scored=true;points(100,p.x,p.y-50);sound.tone(600,.07,'triangle',.15);}}
  barrels=barrels.filter(b=>!b.dead);for(const s of sparks){s.cooldown=Math.max(0,s.cooldown-dt);if(s.cooldown>0)continue;s.x=600+Math.sin(clock*.65+s.phase)*310;s.y=surface(s.floor,s.x)-22+Math.sin(clock*4+s.phase)*6;if(Math.hypot(p.x-s.x,p.y-22-s.y)<30){if(p.power>0){s.cooldown=5;s.phase+=3;points(300,s.x,s.y);burst(s.x,s.y,'#ffe59b');sound.fx('smash');s.x=-1000;}else hurt();}}
  if(state==='playing'&&p.floor===4&&p.onGround&&p.x>1050)finish();
